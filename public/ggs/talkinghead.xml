@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Module>
-  <ModulePrefs title="Remote expert" height="200" width="550">
+  <ModulePrefs title="Remote Expert" height="200" width="550">
   <Require feature="dynamic-height"/>
   <Require feature="rpc"/>
 </ModulePrefs>
