@@ -7,6 +7,9 @@ app.get('/', function (req, res) {
 
 var port = process.env.$PORT || 3000;
 
+console.log('process.env is', process.env);
+console.log("we're using port", port);
+
 var server = app.listen(port, function () {
   var host = server.address().address;
 
