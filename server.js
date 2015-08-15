@@ -1,14 +1,14 @@
 var express = require('express');
 var app = express();
 
+app.use(express.static(__dirname + '/public'));
+
 app.get('/', function (req, res) {
-  res.send('Hello World!');
+  res.send('Hello World');
 });
 
-var port = process.env.PORT || 3000;
 
-console.log('process.env is', process.env);
-console.log("we're using port", port);
+var port = process.env.PORT || 3000;
 
 var server = app.listen(port, function () {
   var host = server.address().address;

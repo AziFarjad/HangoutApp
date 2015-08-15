@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Copyright 2011-2012 Google Inc. All Rights Reserved -->
 <Module>
-  <ModulePrefs title="Talking Head" height="200" width="550">
+  <ModulePrefs title="Remote expert" height="200" width="550">
   <Require feature="dynamic-height"/>
   <Require feature="rpc"/>
 </ModulePrefs>
@@ -12,10 +11,9 @@
     src="//plus.google.com/hangouts/_/api/v1/hangout.js"></script>
 
   <script type="text/javascript"
-    src="//plushangoutstartershadow.appspot.com/ggs/talkinghead.js"></script>
+    src="https://remote-expert.herokuapp.com/ggs/talkinghead.js"></script>
   <link type="text/css" rel="stylesheet"
-    href="//hangoutsapi.appspot.com/static/talkinghead/style.css" />
+    href="https://remote-expert.herokuapp.com/static/talkinghead/style.css" />
 
 ]]></Content>
 </Module>
-
