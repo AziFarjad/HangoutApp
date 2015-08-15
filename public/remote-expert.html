@@ -2,13 +2,44 @@
 <html>
 <head>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/0.3.14/peer.min.js"></script>
+  <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+  <style>
+    video {
+      position:absolute;
+      visibility:hidden;
+    }
+  </style>
 </head>
 
 <body>
   <button type="button" name="button" onclick="iAmTheFieldWorker()">I am the field worker</button>
   <button type="button" name="button" onclick="iAmTheExpert()">I am the Expert</button>
 
+  <video id='video'></video>
+  <canvas id='canvas'></canvas>
+
   <script>
+    var width = 600;
+    var height = 420;
+
+    $('#video').on('  canplay', function(event) {
+      console.log('can play!');
+      var video = this;
+
+      if (video.videoWidth > 0) {
+        height = video.videoHeight / (video.videoWidth / width);
+      }
+
+
+      $('#canvas').attr('height', height);
+      $('#canvas').attr('width', width);
+
+      var context = $('#canvas')[0].getContext('2d');
+      context.translate(width, 0);
+      context.scale(-1, 1);
+    });
+
     navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 
     function iAmTheFieldWorker() {
@@ -19,8 +50,15 @@
       peer.on('open', function(id) {
         console.log('Field worker has an id: ' + id);
 
-        peer.on('call', function(){
+        peer.on('call', function(call) {
           console.log("fieldworker recieved call");
+          call.answer();
+
+          call.on('stream', function(stream) {
+            var url = window.URL || window.webkitURL;
+            $('#video').attr('src', url ? url.createObjectURL(stream) : stream);
+            $('#video')[0].play();
+          });
         });
       });
     };
