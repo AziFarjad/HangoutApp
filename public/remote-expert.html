@@ -23,7 +23,7 @@
     var width = 600;
     var height = 420;
 
-    $('#video').on('  canplay', function(event) {
+    $('#video').on('canplay', function(event) {
       console.log('can play!');
       var video = this;
 
@@ -31,13 +31,26 @@
         height = video.videoHeight / (video.videoWidth / width);
       }
 
-
       $('#canvas').attr('height', height);
       $('#canvas').attr('width', width);
 
       var context = $('#canvas')[0].getContext('2d');
       context.translate(width, 0);
       context.scale(-1, 1);
+    });
+
+    $('#video').on('play', function() {
+      var video = this;
+
+      setInterval(function() {
+         if (video.paused || video.ended) {
+           return;
+         }
+
+         var context = $('#canvas')[0].getContext('2d');
+         context.fillRect(0, 0, width, height);
+         context.drawImage(video, 0, 0, width, height);
+      }, 33);
     });
 
     navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
