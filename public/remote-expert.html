@@ -5,43 +5,33 @@
 </head>
 
 <body>
-
   <button type="button" name="button" onclick="iAmTheFieldWorker()">I am the field worker</button>
   <button type="button" name="button" onclick="iAmTheExpert()">I am the Expert</button>
 
   <script>
     navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 
-
-
     function iAmTheFieldWorker() {
-
       var peer = new Peer('remote-export-field-worker', { key: 'vwxqr8i0iwrn3ik9' });
 
-      peer.on('error', function(error){
-        console.log("eek!", error)
-      });
+      peer.on('error', function(error) { console.log("eek!", error); });
 
       peer.on('open', function(id) {
         console.log('Field worker has an id: ' + id);
 
         peer.on('call', function(){
-          console.log("fieldworker recieved call")
-        })
+          console.log("fieldworker recieved call");
+        });
       });
-      // var conn = peer.connect('dest-peer-id');
-    }
+    };
 
     function iAmTheExpert() {
-
       var peer = new Peer('remote-export-expert', { key: 'vwxqr8i0iwrn3ik9' });
 
       peer.on('open', function(id) {
         console.log('Expert has an id: ' + id);
 
-      peer.on('error', function(error) {
-        console.log("eeek!", error)
-      });
+      peer.on('error', function(error) { console.log("eeek!", error); });
 
         navigator.getUserMedia({video: true, audio: true}, function(stream) {
           console.log('success!');
@@ -52,15 +42,7 @@
         });
 
       });
-      // var conn = peer.connect('dest-peer-id');
-    }
-
-
-
+    };
   </script>
-
-
-
 </body>
-
 </html>
