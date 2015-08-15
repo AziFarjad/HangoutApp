@@ -65,7 +65,12 @@
 
         peer.on('call', function(call) {
           console.log("fieldworker recieved call");
-          call.answer();
+
+          navigator.getUserMedia({video: true, audio: true}, function(stream) {
+            call.answer(stream);
+          }, function(err) {
+            console.log('Failed to get local stream' ,err);
+          });
 
           call.on('stream', function(stream) {
             var url = window.URL || window.webkitURL;
@@ -87,6 +92,12 @@
         navigator.getUserMedia({video: true, audio: true}, function(stream) {
           console.log('success!');
           var call = peer.call('remote-export-field-worker', stream);
+
+          call.on('stream', function(stream) {
+            var url = window.URL || window.webkitURL;
+            $('#video').attr('src', url ? url.createObjectURL(stream) : stream);
+            $('#video')[0].play();
+          });
 
         }, function(err) {
           console.log('Failed to get local stream' ,err);
