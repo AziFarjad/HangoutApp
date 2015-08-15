@@ -1,0 +1,13 @@
+{
+    "name": "remote-expert",
+    "private": true,
+    "version": "0.0.1",
+    "description": "hangout plugin to connect remote workers with experts",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/AziFarjad/HangoutApp.git"
+    },
+    "dependencies": {
+        "express": "*"
+    }
+}
