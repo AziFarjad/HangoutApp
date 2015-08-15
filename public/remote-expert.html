@@ -6,13 +6,21 @@
 
 <body>
 
+  <button type="button" name="button" onclick="iAmTheFieldWorker()" value="I am the field worker"></button>
+
   <script>
 
-    var peer = new Peer({key: 'vwxqr8i0iwrn3ik9'});
+    function iAmTheFieldWorker() {
 
-    peer.on('open', function(id) {
-      console.log('My peer ID is: ' + id);
-    });
+      var peer = new Peer({id: 'remote-export-field-worker', key: 'vwxqr8i0iwrn3ik9'});
+
+      peer.on('open', function(id) {
+        console.log('Field worker has an id: ' + id);
+      });
+      // var conn = peer.connect('dest-peer-id');
+    }
+
+
 
   </script>
 
