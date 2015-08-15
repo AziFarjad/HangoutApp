@@ -6,9 +6,15 @@
 
 <body>
 
-  <button type="button" name="button" onclick="iAmTheFieldWorker()" value="I am the field worker"></button>
+  <button type="button" name="button" onclick="iAmTheFieldWorker()">I am the field worker</button>
+  <button type="button" name="button" onclick="iAmTheExpert()">I am the Expert</button>
 
   <script>
+
+
+    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+
+
 
     function iAmTheFieldWorker() {
 
@@ -16,6 +22,29 @@
 
       peer.on('open', function(id) {
         console.log('Field worker has an id: ' + id);
+
+        peer.on('call', function(){
+          console.log("fieldworker recieved call")
+        })
+      });
+      // var conn = peer.connect('dest-peer-id');
+    }
+
+    function iAmTheExpert() {
+
+      var peer = new Peer({id: 'remote-export-expert', key: 'vwxqr8i0iwrn3ik9'});
+
+      peer.on('open', function(id) {
+        console.log('Expert has an id: ' + id);
+
+        navigator.getUserMedia({video: true, audio: true}, function(stream) {
+          console.log('success!');
+          var call = peer.call('remote-export-field-worker', stream);
+
+        }, function(err) {
+          console.log('Failed to get local stream' ,err);
+        });
+
       });
       // var conn = peer.connect('dest-peer-id');
     }
