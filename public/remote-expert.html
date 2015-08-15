@@ -20,6 +20,10 @@
 
       var peer = new Peer({id: 'remote-export-field-worker', key: 'vwxqr8i0iwrn3ik9'});
 
+      peer.on('error', function(error){
+        console.log("fieldworker did not recieve call", error)
+      });
+
       peer.on('open', function(id) {
         console.log('Field worker has an id: ' + id);
 
@@ -36,6 +40,10 @@
 
       peer.on('open', function(id) {
         console.log('Expert has an id: ' + id);
+        
+      peer.on('error', function(error){
+        console.log("fieldworker did not recieve call", error)
+      });
 
         navigator.getUserMedia({video: true, audio: true}, function(stream) {
           console.log('success!');
