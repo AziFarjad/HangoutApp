@@ -10,18 +10,16 @@
   <button type="button" name="button" onclick="iAmTheExpert()">I am the Expert</button>
 
   <script>
-
-
     navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 
 
 
     function iAmTheFieldWorker() {
 
-      var peer = new Peer({id: 'remote-export-field-worker', key: 'vwxqr8i0iwrn3ik9'});
+      var peer = new Peer('remote-export-field-worker', { key: 'vwxqr8i0iwrn3ik9' });
 
       peer.on('error', function(error){
-        console.log("fieldworker did not recieve call", error)
+        console.log("eek!", error)
       });
 
       peer.on('open', function(id) {
@@ -36,13 +34,13 @@
 
     function iAmTheExpert() {
 
-      var peer = new Peer({id: 'remote-export-expert', key: 'vwxqr8i0iwrn3ik9'});
+      var peer = new Peer('remote-export-expert', { key: 'vwxqr8i0iwrn3ik9' });
 
       peer.on('open', function(id) {
         console.log('Expert has an id: ' + id);
-        
-      peer.on('error', function(error){
-        console.log("fieldworker did not recieve call", error)
+
+      peer.on('error', function(error) {
+        console.log("eeek!", error)
       });
 
         navigator.getUserMedia({video: true, audio: true}, function(stream) {

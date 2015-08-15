@@ -6,6 +6,6 @@ gulp.task('serve', function() {
   nodemon({
       script: 'server.js',
       watch: ['./'],
-      ext: 'js',
+      ext: 'js html',
   }).on('restart', function() { console.log('restarted!'); });
 });
