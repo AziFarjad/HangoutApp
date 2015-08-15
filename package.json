@@ -8,6 +8,8 @@
     "url": "https://github.com/AziFarjad/HangoutApp.git"
   },
   "dependencies": {
-    "express": "https://registry.npmjs.org/express/-/express-4.13.3.tgz"
+    "express": "https://registry.npmjs.org/express/-/express-4.13.3.tgz",
+    "gulp": "*",
+    "gulp-nodemon": "*"
   }
 }

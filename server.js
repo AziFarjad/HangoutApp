@@ -4,14 +4,11 @@ var app = express();
 app.use(express.static(__dirname + '/public'));
 
 app.get('/', function (req, res) {
-  res.send('Hello World');
+  res.redirect('/remote-expert.html');
 });
-
 
 var port = process.env.PORT || 3000;
 
-var server = app.listen(port, function () {
-  var host = server.address().address;
-
-  console.log('Example app listening at http://%s:%s', host, port);
+var server = app.listen(port, function() {
+  console.log('Remote expert running on port', port);
 });
