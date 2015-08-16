@@ -18,13 +18,25 @@
 
   <video id='video'></video>
   <canvas id='canvas'></canvas>
+  <div>
+    <h3>Log</h3>
+    <div id='log' style="width: 80%; height: 300px; overflow: scroll;"></div>
+  </div>
+
 
   <script>
     var width = 600;
     var height = 420;
 
+    var log = function(message) {
+      $('#log').append('<p>' + message + '</p>');
+    };
+
+    console.log('foo bar!');
+    log('initialised.');
+
     $('#video').on('canplay', function(event) {
-      console.log('can play!');
+      log('can play!');
       var video = this;
 
       if (video.videoWidth > 0) {
@@ -58,18 +70,18 @@
     function iAmTheFieldWorker() {
       var peer = new Peer('remote-export-field-worker', { key: 'vwxqr8i0iwrn3ik9' });
 
-      peer.on('error', function(error) { console.log("eek!", error); });
+      peer.on('error', function(error) { log("eek! " + error); });
 
       peer.on('open', function(id) {
-        console.log('Field worker has an id: ' + id);
+        log('Field worker has an id: ' + id);
 
         peer.on('call', function(call) {
-          console.log("fieldworker recieved call");
+          log("fieldworker recieved call");
 
           navigator.getUserMedia({video: true, audio: true}, function(stream) {
             call.answer(stream);
           }, function(err) {
-            console.log('Failed to get local stream' ,err);
+            log('Failed to get local stream: ' + err);
           });
 
           call.on('stream', function(stream) {
@@ -85,12 +97,12 @@
       var peer = new Peer('remote-export-expert', { key: 'vwxqr8i0iwrn3ik9' });
 
       peer.on('open', function(id) {
-        console.log('Expert has an id: ' + id);
+        log('Expert has an id: ' + id);
 
-      peer.on('error', function(error) { console.log("eeek!", error); });
+      peer.on('error', function(error) { log("eeek! " + error); });
 
         navigator.getUserMedia({video: true, audio: true}, function(stream) {
-          console.log('success!');
+          log('success!');
           var call = peer.call('remote-export-field-worker', stream);
 
           call.on('stream', function(stream) {
@@ -100,7 +112,7 @@
           });
 
         }, function(err) {
-          console.log('Failed to get local stream' ,err);
+          log('Failed to get local stream' + err);
         });
 
       });
