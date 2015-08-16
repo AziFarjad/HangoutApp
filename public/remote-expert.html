@@ -13,14 +13,17 @@
 </head>
 
 <body>
-  <button type="button" name="button" onclick="iAmTheFieldWorker()">I am the field worker</button>
-  <button type="button" name="button" onclick="iAmTheExpert()">I am the Expert</button>
+  <button type="button" name="button" onclick="iAmTheFieldWorker()" style='display: block; font-size: 2rem; margin: 1rem;'>I am the field worker</button>
+  <button type="button" name="button" onclick="iAmTheExpert()" style='display: block; font-size: 2rem; margin: 1rem;'>I am the expert</button>
 
   <video id='video'></video>
-  <canvas id='canvas'></canvas>
   <div>
-    <h3>Log</h3>
-    <div id='log' style="width: 80%; height: 300px; overflow: scroll;"></div>
+    <canvas id='canvas' style='border: 1px solid #e0e0e0; position: absolute; right: 20px; top: 20px'></canvas>
+  </div>
+
+  <div style='margin-top: 2rem'>
+    <h3 style='margin: 2rem 0 0.3rem 0; font-family: monospace;'>Log</h3>
+    <div id='log' style="width: 80%; height: 300px; overflow: scroll; font-family: monospace; margin: 0 0 0 0.5rem"></div>
   </div>
 
 
@@ -29,7 +32,7 @@
     var height = 420;
 
     var log = function(message) {
-      $('#log').append('<p>' + message + '</p>');
+      $('#log').append('<p style="margin: 0.1rem 0;">' + message + '</p>');
     };
 
     console.log('foo bar!');
@@ -73,12 +76,13 @@
       peer.on('error', function(error) { log("eek! " + error); });
 
       peer.on('open', function(id) {
-        log('Field worker has an id: ' + id);
+        log("field worker is listening for the expert's video call, caller id is '" + id + "'.");
 
         peer.on('call', function(call) {
-          log("fieldworker recieved call");
+          log("fieldworker has recieved a call, prompting for permission to use video / audio.");
 
           navigator.getUserMedia({video: true, audio: true}, function(stream) {
+            log("fieldworker answered call, sending video stream.");
             call.answer(stream);
           }, function(err) {
             log('Failed to get local stream: ' + err);
@@ -97,15 +101,17 @@
       var peer = new Peer('remote-export-expert', { key: 'vwxqr8i0iwrn3ik9' });
 
       peer.on('open', function(id) {
-        log('Expert has an id: ' + id);
+        log('expert is ready to call the field worker, prompting for permission to user video / audio.');
 
       peer.on('error', function(error) { log("eeek! " + error); });
 
         navigator.getUserMedia({video: true, audio: true}, function(stream) {
-          log('success!');
+          log('expert is calling the fieldworker.');
           var call = peer.call('remote-export-field-worker', stream);
 
           call.on('stream', function(stream) {
+            log('call started, sending and receiving video stream.');
+
             var url = window.URL || window.webkitURL;
             $('#video').attr('src', url ? url.createObjectURL(stream) : stream);
             $('#video')[0].play();
