@@ -3,6 +3,7 @@
 <head>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/0.3.14/peer.min.js"></script>
   <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+  <script src="sketch.min.js"></script>
 
   <style>
     video {
@@ -129,9 +130,10 @@
     };
 
     function takeSnapshot() {
-      var context = $('#snapshot')[0].getContext('2d');
-      context.fillRect(0, 0, width, height);
-      context.drawImage(video, 0, 0, width, height);
+      var dataUrl = $('#canvas')[0].toDataURL();
+      $('#snapshot')
+        .css('background', 'url(' + dataUrl + ') no-repeat center center')
+        .sketch();
     };
   </script>
 </body>
