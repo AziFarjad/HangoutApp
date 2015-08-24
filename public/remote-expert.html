@@ -3,6 +3,7 @@
 <head>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/0.3.14/peer.min.js"></script>
   <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+  <script src="sketch.min.js"></script>
 
   <style>
     video {
@@ -17,8 +18,10 @@
   <button type="button" name="button" onclick="iAmTheExpert()" style='display: block; font-size: 2rem; margin: 1rem;'>I am the expert</button>
 
   <video id='video'></video>
-  <div>
-    <canvas id='canvas' style='border: 1px solid #e0e0e0; position: absolute; right: 20px; top: 20px'></canvas>
+  <div style='position: absolute; right: 20px; top: 20px'>
+    <canvas id='canvas' style='border: 1px solid #e0e0e0;'></canvas>
+    <button type="button" name="button" onclick="takeSnapshot()" style='display: block; font-size: 2rem; margin: 1rem;'>Take snapshot</button>
+    <canvas id='snapshot' style='border: 1px dashed #e0e0e0;'></canvas>
   </div>
 
   <div style='margin-top: 2rem'>
@@ -46,12 +49,14 @@
         height = video.videoHeight / (video.videoWidth / width);
       }
 
-      $('#canvas').attr('height', height);
-      $('#canvas').attr('width', width);
+      $('canvas').attr('height', height);
+      $('canvas').attr('width', width);
 
-      var context = $('#canvas')[0].getContext('2d');
-      context.translate(width, 0);
-      context.scale(-1, 1);
+      $('canvas').each(function(i, elm) {
+        var context = $(elm)[0].getContext('2d');
+        context.translate(width, 0);
+        context.scale(-1, 1);
+      });
     });
 
     $('#video').on('play', function() {
@@ -122,6 +127,13 @@
         });
 
       });
+    };
+
+    function takeSnapshot() {
+      var dataUrl = $('#canvas')[0].toDataURL();
+      $('#snapshot')
+        .css('background', 'url(' + dataUrl + ') no-repeat center center')
+        .sketch();
     };
   </script>
 </body>
