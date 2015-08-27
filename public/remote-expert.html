@@ -19,9 +19,12 @@
 
   <video id='video'></video>
   <div style='position: absolute; right: 20px; top: 20px'>
-    <canvas id='canvas' style='border: 1px solid #e0e0e0;'></canvas>
+    <canvas id='canvas' class='reversed' style='border: 1px solid #e0e0e0;'></canvas>
     <button type="button" name="button" onclick="takeSnapshot()" style='display: block; font-size: 2rem; margin: 1rem;'>Take snapshot</button>
-    <canvas id='snapshot' style='border: 1px dashed #e0e0e0;'></canvas>
+    <canvas id='snapshot' class='reversed' style='border: 1px dashed #e0e0e0;'></canvas>
+    <button type="button" name="button" onclick="sendSnapshot()" style='display: block; font-size: 2rem; margin: 1rem;'>Send snapshot</button>
+    <canvas id='temp' style='display: none;'></canvas>
+    <canvas id='annotated' style='border: 1px dashed #e0e0e0;'></canvas>
   </div>
 
   <div style='margin-top: 2rem'>
@@ -31,8 +34,11 @@
 
 
   <script>
-    var width = 600;
-    var height = 420;
+    var width = 300;
+    var height = 210;
+    var peerExpert;
+    var connToFieldWorker;
+    var snapshotImage = new Image();
 
     var log = function(message) {
       $('#log').append('<p style="margin: 0.1rem 0;">' + message + '</p>');
@@ -52,7 +58,7 @@
       $('canvas').attr('height', height);
       $('canvas').attr('width', width);
 
-      $('canvas').each(function(i, elm) {
+      $('canvas.reversed').each(function(i, elm) {
         var context = $(elm)[0].getContext('2d');
         context.translate(width, 0);
         context.scale(-1, 1);
@@ -99,16 +105,23 @@
             $('#video')[0].play();
           });
         });
+
+        peer.on('connection', function(conn) {
+          conn.on('data', function(data) {
+            log('received snapshot.');
+            $('#annotated').css('background', 'url(' + data + ') no-repeat center center')
+          })
+        });
       });
     };
 
     function iAmTheExpert() {
       var peer = new Peer('remote-export-expert', { key: 'vwxqr8i0iwrn3ik9' });
 
+      peer.on('error', function(error) { log("eeek! " + error); });
+
       peer.on('open', function(id) {
         log('expert is ready to call the field worker, prompting for permission to user video / audio.');
-
-      peer.on('error', function(error) { log("eeek! " + error); });
 
         navigator.getUserMedia({video: true, audio: true}, function(stream) {
           log('expert is calling the fieldworker.');
@@ -127,13 +140,47 @@
         });
 
       });
+
+      peerExpert = peer;
     };
 
+    function sendSnapshot() {
+      if (!connToFieldWorker) {
+        log('expert is connecting to fieldworker.');
+        connToFieldWorker = peerExpert.connect('remote-export-field-worker');
+
+        connToFieldWorker.on('error', function(err) {
+          log(err);
+        });
+
+        connToFieldWorker.on('open', function() {
+          log('connection opened.');
+
+          createAndSendSnapshot();
+        });
+      } else {
+        createAndSendSnapshot();
+      }
+    };
+
+    function createAndSendSnapshot() {
+      var ctx = $('#temp')[0].getContext('2d');
+      ctx.drawImage(snapshotImage, 0, 0);
+      ctx.drawImage($('#snapshot')[0], 0, 0);
+
+      log('sending snapshot.');
+      connToFieldWorker.send($('#temp')[0].toDataURL());
+    }
+
     function takeSnapshot() {
-      var dataUrl = $('#canvas')[0].toDataURL();
-      $('#snapshot')
-        .css('background', 'url(' + dataUrl + ') no-repeat center center')
-        .sketch();
+      var snapshot = $('#snapshot');
+      var snapshotDataUrl = $('#canvas')[0].toDataURL();
+      snapshot
+        .css('background', 'url(' + snapshotDataUrl + ') no-repeat center center')
+        .sketch()
+      snapshot.sketch('actions', []);
+      snapshot[0].getContext('2d').clearRect(0, 0, width, height);
+      snapshotImage.src = snapshotDataUrl;
     };
   </script>
 </body>
