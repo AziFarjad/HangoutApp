@@ -21,8 +21,8 @@ h3 {
 
 #log {
   font-family: monospace;
-  height: 300px;
-  margin: 0 0 0 0.5rem;
-  overflow: scroll;
-  width: 80%;
+  height: 100px;
+  position: fixed;
+  bottom: 10px;
+  width: 98%;
 }

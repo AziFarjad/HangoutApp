@@ -9,7 +9,7 @@ var recoll = (function($) {
   var snapshotImage = new Image();
 
   var log = function(message) {
-    $('#log').append('<p style="margin: 0.1rem 0;">' + message + '</p>');
+    $('#log').append(message + '\n');
   };
 
   console.log('foo bar!');
