@@ -1,0 +1,39 @@
+
+<html>
+<head>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/0.3.14/peer.min.js"></script>
+  <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+  <script src="sketch.min.js"></script>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <h1>Field Worker</h1>
+
+  <button type="button" data-button="field-worker">Click me first!</button>
+
+  <video id='video'></video>
+  <div style='position: absolute; right: 20px; top: 20px'>
+    <canvas id='canvas' class='reversed'></canvas>
+    <br />
+    <canvas id='annotated'></canvas>
+  </div>
+
+  <div style='margin-top: 2rem'>
+    <h3>Log</h3>
+    <div id='log'></div>
+  </div>
+
+  <script src="remote-expert.js"></script>
+  <script>
+    $(function() {
+      recoll.initUI(
+        $('[data-button="field-worker"]'),
+        $('[data-button="expert"]'),
+        $('[data-button="take-snapshot"]'),
+        $('[data-button="send-snapshot"]')
+      );
+    });
+  </script>
+</body>
+</html>

@@ -4,39 +4,14 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/0.3.14/peer.min.js"></script>
   <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
   <script src="sketch.min.js"></script>
-
   <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
-  <button type="button" data-button="field-worker">I am the field worker</button>
-  <button type="button" data-button="expert">I am the expert</button>
-
-  <video id='video'></video>
-  <div style='position: absolute; right: 20px; top: 20px'>
-    <canvas id='canvas' class='reversed'></canvas>
-    <button type="button" data-button="take-snapshot">Take snapshot</button>
-    <canvas id='snapshot' class='reversed'></canvas>
-    <button type="button" data-button="send-snapshot">Send snapshot</button>
-    <canvas id='temp' style='display: none;'></canvas>
-    <canvas id='annotated'></canvas>
-  </div>
-
-  <div style='margin-top: 2rem'>
-    <h3>Log</h3>
-    <div id='log'></div>
-  </div>
-
-  <script src="remote-expert.js"></script>
-  <script>
-    $(function() {
-      recoll.initUI(
-        $('[data-button="field-worker"]'),
-        $('[data-button="expert"]'),
-        $('[data-button="take-snapshot"]'),
-        $('[data-button="send-snapshot"]')
-      );
-    });
-  </script>
+  To get started, open these links in two separate browser windows:
+  <ul>
+    <li><a href="view-field-worker.html">I am the field worker<a/></li>
+    <li><a href="view-expert.html">I am the expert<a/></li>
+  </ul>
 </body>
 </html>
