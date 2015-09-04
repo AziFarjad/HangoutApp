@@ -5,31 +5,26 @@
   <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
   <script src="sketch.min.js"></script>
 
-  <style>
-    video {
-      position:absolute;
-      visibility:hidden;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
-  <button type="button" name="button" data-button="field-worker" style='display: block; font-size: 2rem; margin: 1rem;'>I am the field worker</button>
-  <button type="button" name="button" data-button="expert" style='display: block; font-size: 2rem; margin: 1rem;'>I am the expert</button>
+  <button type="button" data-button="field-worker">I am the field worker</button>
+  <button type="button" data-button="expert">I am the expert</button>
 
   <video id='video'></video>
   <div style='position: absolute; right: 20px; top: 20px'>
-    <canvas id='canvas' class='reversed' style='border: 1px solid #e0e0e0;'></canvas>
-    <button type="button" name="button" data-button="take-snapshot" style='display: block; font-size: 2rem; margin: 1rem;'>Take snapshot</button>
-    <canvas id='snapshot' class='reversed' style='border: 1px dashed #e0e0e0;'></canvas>
-    <button type="button" name="button" data-button="send-snapshot" style='display: block; font-size: 2rem; margin: 1rem;'>Send snapshot</button>
+    <canvas id='canvas' class='reversed'></canvas>
+    <button type="button" data-button="take-snapshot">Take snapshot</button>
+    <canvas id='snapshot' class='reversed'></canvas>
+    <button type="button" data-button="send-snapshot">Send snapshot</button>
     <canvas id='temp' style='display: none;'></canvas>
-    <canvas id='annotated' style='border: 1px dashed #e0e0e0;'></canvas>
+    <canvas id='annotated'></canvas>
   </div>
 
   <div style='margin-top: 2rem'>
-    <h3 style='margin: 2rem 0 0.3rem 0; font-family: monospace;'>Log</h3>
-    <div id='log' style="width: 80%; height: 300px; overflow: scroll; font-family: monospace; margin: 0 0 0 0.5rem"></div>
+    <h3>Log</h3>
+    <div id='log'></div>
   </div>
 
   <script src="remote-expert.js"></script>
