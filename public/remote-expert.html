@@ -14,15 +14,15 @@
 </head>
 
 <body>
-  <button type="button" name="button" onclick="iAmTheFieldWorker()" style='display: block; font-size: 2rem; margin: 1rem;'>I am the field worker</button>
-  <button type="button" name="button" onclick="iAmTheExpert()" style='display: block; font-size: 2rem; margin: 1rem;'>I am the expert</button>
+  <button type="button" name="button" data-button="field-worker" style='display: block; font-size: 2rem; margin: 1rem;'>I am the field worker</button>
+  <button type="button" name="button" data-button="expert" style='display: block; font-size: 2rem; margin: 1rem;'>I am the expert</button>
 
   <video id='video'></video>
   <div style='position: absolute; right: 20px; top: 20px'>
     <canvas id='canvas' class='reversed' style='border: 1px solid #e0e0e0;'></canvas>
-    <button type="button" name="button" onclick="takeSnapshot()" style='display: block; font-size: 2rem; margin: 1rem;'>Take snapshot</button>
+    <button type="button" name="button" data-button="take-snapshot" style='display: block; font-size: 2rem; margin: 1rem;'>Take snapshot</button>
     <canvas id='snapshot' class='reversed' style='border: 1px dashed #e0e0e0;'></canvas>
-    <button type="button" name="button" onclick="sendSnapshot()" style='display: block; font-size: 2rem; margin: 1rem;'>Send snapshot</button>
+    <button type="button" name="button" data-button="send-snapshot" style='display: block; font-size: 2rem; margin: 1rem;'>Send snapshot</button>
     <canvas id='temp' style='display: none;'></canvas>
     <canvas id='annotated' style='border: 1px dashed #e0e0e0;'></canvas>
   </div>
@@ -33,5 +33,15 @@
   </div>
 
   <script src="remote-expert.js"></script>
+  <script>
+    $(function() {
+      recoll.initUI(
+        $('[data-button="field-worker"]'),
+        $('[data-button="expert"]'),
+        $('[data-button="take-snapshot"]'),
+        $('[data-button="send-snapshot"]')
+      );
+    });
+  </script>
 </body>
 </html>
