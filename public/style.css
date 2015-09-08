@@ -1,4 +1,13 @@
 
+
+body {
+  font-family: avenir, sans-serif;
+}
+
+h1 {
+  font-weight: 600;
+}
+
 video {
   position: absolute;
   visibility: hidden;
@@ -7,18 +16,20 @@ video {
 }
 
 button {
+  cursor: pointer;
   display: block;
   font-size: 2rem;
-  margin: 1rem;
+  margin: 1rem 0;
+}
+
+button.secondary {
+  display: inline;
+  font-size: 1.25rem;
+  margin: .25rem 0;
 }
 
 canvas {
   border: 1px solid #e0e0e0;
-}
-
-h3 {
-  font-family: monospace;
-  margin: 2rem 0 0.3rem 0;
 }
 
 #log {
