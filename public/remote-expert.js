@@ -77,7 +77,13 @@ var recoll = (function($) {
       peer.on('connection', function(conn) {
         conn.on('data', function(data) {
           log('received snapshot.');
-          $('#annotated').css('background', 'url(' + data + ') no-repeat center center')
+          if (typeof(data) === 'string') {
+            $('#annotated').css('background', 'url(' + data + ') no-repeat center center')
+          } else {
+            var context = $('#canvas')[0].getContext('2d');
+            context.strokeStyle = data.color;
+            context.strokeRect(data.x, data.y, data.width, data.height);
+          }
         })
       });
     });
@@ -151,13 +157,32 @@ var recoll = (function($) {
     snapshotImage.src = snapshotDataUrl;
   };
 
+  function captureHands() {
+    var colors = new tracking.ColorTracker(['magenta', 'cyan', 'yellow']);
+
+    colors.on('track', function(event) {
+      if (event.data.length === 0) {
+        // No colors were detected in this frame.
+      } else {
+        event.data.forEach(function(rect) {
+          //console.log(rect.x, rect.y, rect.height, rect.width, rect.color);
+          connToFieldWorker.send(rect);
+        });
+      }
+    });
+
+    tracking.track('#video', colors, { camera: false });
+  }
+
   initUI = function(
     $fieldWorkerButton,
     $expertButton,
+    $captureHandsButton,
     $takeSnapshotButton,
     $sendSnapshotButton) {
     $fieldWorkerButton.click(iAmTheFieldWorker);
     $expertButton.click(iAmTheExpert);
+    $captureHandsButton.click(captureHands);
     $takeSnapshotButton.click(takeSnapshot);
     $sendSnapshotButton.click(sendSnapshot);
   };

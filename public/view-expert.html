@@ -4,6 +4,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/0.3.14/peer.min.js"></script>
   <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
   <script src="sketch.min.js"></script>
+  <script src="tracking-min.js"></script>
   <link rel="stylesheet" href="style.css" />
 </head>
 
@@ -16,6 +17,7 @@
 
   <video id='video'></video>
   <div style='position: absolute; right: 20px; top: 20px'>
+    <button type="button" data-button="capture-hands">Capture hands</button>
     <canvas id='canvas' class='reversed'></canvas>
     <button type="button" data-button="take-snapshot">Take snapshot</button>
     <canvas id='snapshot' class='reversed'></canvas>
@@ -29,6 +31,7 @@
       recoll.initUI(
         $('[data-button="field-worker"]'),
         $('[data-button="expert"]'),
+        $('[data-button="capture-hands"]'),
         $('[data-button="take-snapshot"]'),
         $('[data-button="send-snapshot"]')
       );
