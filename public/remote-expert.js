@@ -4,7 +4,6 @@ var recoll = (function($) {
 
   var width = 300;
   var height = 210;
-  var peerExpert;
   var connToFieldWorker;
   var snapshotImage = new Image();
 
@@ -58,7 +57,7 @@ var recoll = (function($) {
       log("field worker is listening for the expert's video call, caller id is '" + id + "'.");
 
       peer.on('call', function(call) {
-        log("fieldworker has recieved a call, prompting for permission to use video / audio.");
+        log("fieldworker has received a call, prompting for permission to use video / audio.");
 
         navigator.getUserMedia({video: true, audio: true}, function(stream) {
           log("fieldworker answered call, sending video stream.");
@@ -76,8 +75,8 @@ var recoll = (function($) {
 
       peer.on('connection', function(conn) {
         conn.on('data', function(data) {
-          log('received snapshot.');
           if (typeof(data) === 'string') {
+            log('received snapshot.');
             $('#annotated').css('background', 'url(' + data + ') no-repeat center center')
           } else {
             var context = $('#canvas')[0].getContext('2d');
@@ -109,42 +108,24 @@ var recoll = (function($) {
           $('#video')[0].play();
         });
 
+        log('expert is connecting to fieldworker.');
+        connToFieldWorker = peer.connect('remote-export-field-worker');
+        connToFieldWorker.on('error', function(err) { log(err); });
+        connToFieldWorker.on('open', function() { log('connection opened.'); });
       }, function(err) {
         log('Failed to get local stream' + err);
       });
-
     });
-
-    peerExpert = peer;
   };
 
   function sendSnapshot() {
-    if (!connToFieldWorker) {
-      log('expert is connecting to fieldworker.');
-      connToFieldWorker = peerExpert.connect('remote-export-field-worker');
-
-      connToFieldWorker.on('error', function(err) {
-        log(err);
-      });
-
-      connToFieldWorker.on('open', function() {
-        log('connection opened.');
-
-        createAndSendSnapshot();
-      });
-    } else {
-      createAndSendSnapshot();
-    }
-  };
-
-  function createAndSendSnapshot() {
     var ctx = $('#temp')[0].getContext('2d');
     ctx.drawImage(snapshotImage, 0, 0);
     ctx.drawImage($('#snapshot')[0], 0, 0);
 
     log('sending snapshot.');
     connToFieldWorker.send($('#temp')[0].toDataURL());
-  }
+  };
 
   function takeSnapshot() {
     var snapshot = $('#snapshot');
@@ -172,7 +153,7 @@ var recoll = (function($) {
     });
 
     tracking.track('#video', colors, { camera: false });
-  }
+  };
 
   initUI = function(
     $fieldWorkerButton,
