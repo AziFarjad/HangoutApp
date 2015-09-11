@@ -139,20 +139,72 @@ var recoll = (function($) {
   };
 
   function captureHands() {
-    var colors = new tracking.ColorTracker(['magenta', 'cyan', 'yellow']);
+    tracking.ColorTracker.registerColor('pink', function(r, g, b) {
+      if (r >= 100 && r <= 170 &&
+          g >= 20 && g <= 80 &&
+          b >= 60 && b <= 110) {
+            return true;
+          }
+        return false;
+    });
+    var colors = new tracking.ColorTracker(['pink']);
+    //var colors = new tracking.ColorTracker(['yellow']);
 
+    var colorRects = [];
     colors.on('track', function(event) {
-      if (event.data.length === 0) {
+      colorRects = event.data;
+      /*if (event.data.length === 0) {
         // No colors were detected in this frame.
       } else {
         event.data.forEach(function(rect) {
           //console.log(rect.x, rect.y, rect.height, rect.width, rect.color);
-          connToFieldWorker.send(rect);
+          //connToFieldWorker.send(rect);
         });
-      }
+      }*/
     });
 
     tracking.track('#video', colors, { camera: false });
+
+    var canvas = document.getElementById('canvas');
+    var context = canvas.getContext('2d');
+
+    var FastTracker = function() {
+      FastTracker.base(this, 'constructor');
+    };
+    tracking.inherits(FastTracker, tracking.Tracker);
+    tracking.Fast.THRESHOLD = 2;
+    FastTracker.prototype.threshold = tracking.Fast.THRESHOLD;
+    FastTracker.prototype.track = function(pixels, width, height) {
+      var gray = tracking.Image.grayscale(pixels, width, height);
+      var corners = tracking.Fast.findCorners(gray, width, height);
+      this.emit('track', {
+        data: corners
+      });
+    };
+    var tracker = new FastTracker();
+    tracker.on('track', function(event) {
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      var corners = event.data;
+      for (var i = 0; i < corners.length; i += 2) {
+        context.fillStyle = '#f00';
+        if (checkWithinArea(corners[i], corners[i + 1], colorRects)) {
+          context.fillRect(corners[i], corners[i + 1], 2, 2);
+        }
+      }
+    });
+    tracking.track('#video', tracker, { camera: false });
+  };
+
+  function checkWithinArea(x, y, rects) {
+    var within = false;
+    //console.log(rects[0] ? (rects[0].x + ' ' + rects[0].y + ' ' + rects[0].width + ' ' + rects[0].height) : '', rects.length);
+    rects.forEach(function(rect) {
+      if (x >= rect.x && x <= rect.x + rect.width &&
+          y >= rect.y && y <= rect.y + rect.height) {
+            within = true;
+          }
+    });
+    return within;
   };
 
   initUI = function(
