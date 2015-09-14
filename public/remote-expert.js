@@ -48,46 +48,6 @@ var recoll = (function($) {
 
   navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 
-  function iAmTheFieldWorker() {
-    var peer = new Peer('remote-export-field-worker', { key: 'vwxqr8i0iwrn3ik9' });
-
-    peer.on('error', function(error) { log("eek! " + error); });
-
-    peer.on('open', function(id) {
-      log("field worker is listening for the expert's video call, caller id is '" + id + "'.");
-
-      peer.on('call', function(call) {
-        log("fieldworker has received a call, prompting for permission to use video / audio.");
-
-        navigator.getUserMedia({video: true, audio: true}, function(stream) {
-          log("fieldworker answered call, sending video stream.");
-          call.answer(stream);
-        }, function(err) {
-          log('Failed to get local stream: ' + err);
-        });
-
-        call.on('stream', function(stream) {
-          var url = window.URL || window.webkitURL;
-          $('#video').attr('src', url ? url.createObjectURL(stream) : stream);
-          $('#video')[0].play();
-        });
-      });
-
-      peer.on('connection', function(conn) {
-        conn.on('data', function(data) {
-          if (typeof(data) === 'string') {
-            log('received snapshot.');
-            $('#annotated').css('background', 'url(' + data + ') no-repeat center center')
-          } else {
-            var context = $('#canvas')[0].getContext('2d');
-            context.strokeStyle = data.color;
-            context.strokeRect(data.x, data.y, data.width, data.height);
-          }
-        })
-      });
-    });
-  };
-
   function iAmTheExpert() {
     var peer = new Peer('remote-export-expert', { key: 'vwxqr8i0iwrn3ik9' });
 
@@ -144,29 +104,27 @@ var recoll = (function($) {
           g >= 20 && g <= 80 &&
           b >= 60 && b <= 110) {
             return true;
-          }
+        }
         return false;
     });
-    var colors = new tracking.ColorTracker(['pink']);
-    //var colors = new tracking.ColorTracker(['yellow']);
+
+    tracking.ColorTracker.registerColor('skin', function(r, g, b) {
+      if (r >= 130 && r <= 200 &&
+          g >= 110 && g <= 160 &&
+          b >= 90 && b <= 120) {
+            return true;
+        }
+        return false;
+    });
+    var colors = new tracking.ColorTracker(['skin']);
+    //var colors = new tracking.ColorTracker(['magenta', 'yellow']);
 
     var colorRects = [];
     colors.on('track', function(event) {
       colorRects = event.data;
-      /*if (event.data.length === 0) {
-        // No colors were detected in this frame.
-      } else {
-        event.data.forEach(function(rect) {
-          //console.log(rect.x, rect.y, rect.height, rect.width, rect.color);
-          //connToFieldWorker.send(rect);
-        });
-      }*/
     });
 
     tracking.track('#video', colors, { camera: false });
-
-    var canvas = document.getElementById('canvas');
-    var context = canvas.getContext('2d');
 
     var FastTracker = function() {
       FastTracker.base(this, 'constructor');
@@ -183,21 +141,21 @@ var recoll = (function($) {
     };
     var tracker = new FastTracker();
     tracker.on('track', function(event) {
-      context.clearRect(0, 0, canvas.width, canvas.height);
       var corners = event.data;
+      var filteredCorners = [];
       for (var i = 0; i < corners.length; i += 2) {
-        context.fillStyle = '#f00';
         if (checkWithinArea(corners[i], corners[i + 1], colorRects)) {
-          context.fillRect(corners[i], corners[i + 1], 2, 2);
+          filteredCorners.push(corners[i]);
+          filteredCorners.push(corners[i + 1]);
         }
       }
+      connToFieldWorker.send(filteredCorners);
     });
     tracking.track('#video', tracker, { camera: false });
   };
 
   function checkWithinArea(x, y, rects) {
     var within = false;
-    //console.log(rects[0] ? (rects[0].x + ' ' + rects[0].y + ' ' + rects[0].width + ' ' + rects[0].height) : '', rects.length);
     rects.forEach(function(rect) {
       if (x >= rect.x && x <= rect.x + rect.width &&
           y >= rect.y && y <= rect.y + rect.height) {
@@ -208,12 +166,10 @@ var recoll = (function($) {
   };
 
   initUI = function(
-    $fieldWorkerButton,
     $expertButton,
     $captureHandsButton,
     $takeSnapshotButton,
     $sendSnapshotButton) {
-    $fieldWorkerButton.click(iAmTheFieldWorker);
     $expertButton.click(iAmTheExpert);
     $captureHandsButton.click(captureHands);
     $takeSnapshotButton.click(takeSnapshot);

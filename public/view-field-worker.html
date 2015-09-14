@@ -15,22 +15,19 @@
   <button type="button" data-button="field-worker" data-autodisable>Click me first!</button>
 
   <video id='video'></video>
-  <div style='position: absolute; right: 20px; top: 20px'>
-    <canvas id='canvas' class='reversed'></canvas>
+  <div style='position: absolute; right: 320px; top: 20px'>
+    <canvas id='canvas' class='reversed' style="position: absolute; left: 0; top: 0; z-index: 0;"></canvas>
+    <canvas id='canvas_top' class="reversed" style="position: absolute; left: 0; top: 0; z-index: 1;"></canvas>
     <br />
-    <canvas id='annotated'></canvas>
+    <canvas id='annotated' style="position: absolute; left: 0; top: 240;"></canvas>
   </div>
 
   <script src="ui.js"></script>
-  <script src="remote-expert.js"></script>
+  <script src="field_worker.js"></script>
   <script>
     $(function() {
       recoll.initUI(
-        $('[data-button="field-worker"]'),
-        $('[data-button="expert"]'),
-        $('[data-button="capture-hands"]'),
-        $('[data-button="take-snapshot"]'),
-        $('[data-button="send-snapshot"]')
+        $('[data-button="field-worker"]')
       );
     });
   </script>
