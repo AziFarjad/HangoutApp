@@ -6,15 +6,15 @@ var recoll = (function($) {
   var height = 210;
   var connToFieldWorker;
   var snapshotImage = new Image();
+  var url = window.URL || window.webkitURL;
 
   var log = function(message) {
     $('#log').append(message + '\n');
   };
 
-  console.log('foo bar!');
   log('initialised.');
 
-  $('#video').on('canplay', function(event) {
+  $('#video_remote').on('canplay', function(event) {
     log('starting video.');
     var video = this;
 
@@ -32,7 +32,7 @@ var recoll = (function($) {
     });
   });
 
-  $('#video').on('play', function() {
+  $('#video_remote').on('play', function() {
     var video = this;
 
     setInterval(function() {
@@ -49,23 +49,27 @@ var recoll = (function($) {
   navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 
   function iAmTheExpert() {
-    var peer = new Peer('remote-export-expert', { key: 'vwxqr8i0iwrn3ik9' });
+    // stand-alone peer server recoll-peer-server.herokuapp.com was set up to allow secure connection
+    var peer = new Peer('remote-export-expert', { host: 'recoll-peer-server.herokuapp.com', secure: true, port: 443, debug: 3 });
 
     peer.on('error', function(error) { log("eeek! " + error); });
 
     peer.on('open', function(id) {
       log('expert is ready to call the field worker, prompting for permission to user video / audio.');
 
-      navigator.getUserMedia({video: true, audio: true}, function(stream) {
+      navigator.getUserMedia({ video: true, audio: true }, function(stream) {
+        // display local video
+        $('#video_local').attr('src', url ? url.createObjectURL(stream) : stream);
+        $('#video_local')[0].play();
+
         log('expert is calling the fieldworker.');
         var call = peer.call('remote-export-field-worker', stream);
 
         call.on('stream', function(stream) {
           log('call started, sending and receiving video stream.');
 
-          var url = window.URL || window.webkitURL;
-          $('#video').attr('src', url ? url.createObjectURL(stream) : stream);
-          $('#video')[0].play();
+          $('#video_remote').attr('src', url ? url.createObjectURL(stream) : stream);
+          $('#video_remote')[0].play();
         });
 
         log('expert is connecting to fieldworker.');
@@ -99,33 +103,40 @@ var recoll = (function($) {
   };
 
   function captureHands() {
-    tracking.ColorTracker.registerColor('pink', function(r, g, b) {
-      if (r >= 100 && r <= 170 &&
-          g >= 20 && g <= 80 &&
-          b >= 60 && b <= 110) {
-            return true;
-        }
-        return false;
-    });
+// Define a custom colour in Tracking utility
+// Use Digital Color Meter tool to calibrate the new colour
 
-    tracking.ColorTracker.registerColor('skin', function(r, g, b) {
-      if (r >= 130 && r <= 200 &&
-          g >= 110 && g <= 160 &&
-          b >= 90 && b <= 120) {
+    // use for poor light
+    tracking.ColorTracker.registerColor('blue', function(r, g, b) {
+      if (r >= 10 && r <= 50 &&
+          g >= 20 && g <= 90 &&
+          b >= 80 && b <= 150) {
             return true;
         }
         return false;
     });
-    var colors = new tracking.ColorTracker(['skin']);
+    /* Use for good light
+    tracking.ColorTracker.registerColor('blue', function(r, g, b) {
+      if (r >= 10 && r <= 70 &&
+          g >= 60 && g <= 120 &&
+          b >= 160 && b <= 215) {
+            return true;
+        }
+        return false;
+    });*/
+    var colors = new tracking.ColorTracker(['blue']);
     //var colors = new tracking.ColorTracker(['magenta', 'yellow']);
 
+    // Detect rectangular areas in video which have objects with the defined colour in them (i.e. hands)
     var colorRects = [];
     colors.on('track', function(event) {
       colorRects = event.data;
     });
 
-    tracking.track('#video', colors, { camera: false });
+    tracking.track('#video_local', colors, { camera: false });
 
+    // Apply Fast Tracking to video it order to define object edges
+    // http://trackingjs.com/examples/fast_camera.html
     var FastTracker = function() {
       FastTracker.base(this, 'constructor');
     };
@@ -144,16 +155,20 @@ var recoll = (function($) {
       var corners = event.data;
       var filteredCorners = [];
       for (var i = 0; i < corners.length; i += 2) {
+        // Only record a dot if it's within the areas defined by colour tracking
         if (checkWithinArea(corners[i], corners[i + 1], colorRects)) {
           filteredCorners.push(corners[i]);
           filteredCorners.push(corners[i + 1]);
         }
       }
+      // Send the array of edge dots to field worker as data
       connToFieldWorker.send(filteredCorners);
+      showCapturedHands(filteredCorners);
     });
-    tracking.track('#video', tracker, { camera: false });
+    tracking.track('#video_local', tracker, { camera: false });
   };
 
+  // Checks if the dot is within any of the given rectangulars
   function checkWithinArea(x, y, rects) {
     var within = false;
     rects.forEach(function(rect) {
@@ -163,6 +178,15 @@ var recoll = (function($) {
           }
     });
     return within;
+  };
+
+  function showCapturedHands(data) {
+    var context = $('#canvas_top')[0].getContext('2d');
+    context.clearRect(0, 0, width, height);
+    for (var i = 0; i < data.length; i += 2) {
+      context.fillStyle = '#f00';
+      context.fillRect(data[i], data[i + 1], 2, 2);
+    }
   };
 
   initUI = function(

@@ -4,15 +4,15 @@ var recoll = (function($) {
 
   var width = 300;
   var height = 210;
+  var url = window.URL || window.webkitURL;
 
   var log = function(message) {
     $('#log').append(message + '\n');
   };
 
-  console.log('foo bar!');
   log('initialised.');
 
-  $('#video').on('canplay', function(event) {
+  $('#video_local').on('canplay', function(event) {
     log('starting video.');
     var video = this;
 
@@ -30,7 +30,7 @@ var recoll = (function($) {
     });
   });
 
-  $('#video').on('play', function() {
+  $('#video_local').on('play', function() {
     var video = this;
 
     setInterval(function() {
@@ -47,7 +47,7 @@ var recoll = (function($) {
   navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 
   function iAmTheFieldWorker() {
-    var peer = new Peer('remote-export-field-worker', { key: 'vwxqr8i0iwrn3ik9' });
+    var peer = new Peer('remote-export-field-worker', { host: 'recoll-peer-server.herokuapp.com', secure: true, port: 443, debug: 3 });
 
     peer.on('error', function(error) { log("eek! " + error); });
 
@@ -56,8 +56,11 @@ var recoll = (function($) {
 
       peer.on('call', function(call) {
         log("fieldworker has received a call, prompting for permission to use video / audio.");
+        navigator.getUserMedia({ video: true, audio: true }, function(stream) {
+          // display local video
+          $('#video_local').attr('src', url ? url.createObjectURL(stream) : stream);
+          $('#video_local')[0].play();
 
-        navigator.getUserMedia({video: true, audio: true}, function(stream) {
           log("fieldworker answered call, sending video stream.");
           call.answer(stream);
         }, function(err) {
@@ -65,9 +68,8 @@ var recoll = (function($) {
         });
 
         call.on('stream', function(stream) {
-          var url = window.URL || window.webkitURL;
-          $('#video').attr('src', url ? url.createObjectURL(stream) : stream);
-          $('#video')[0].play();
+          $('#video_remote').attr('src', url ? url.createObjectURL(stream) : stream);
+          $('#video_remote')[0].play();
         });
       });
 

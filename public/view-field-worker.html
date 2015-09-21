@@ -9,17 +9,23 @@
 
 <body>
   <h1>Field Worker</h1>
-
   <textarea id="log"></textarea>
 
   <button type="button" data-button="field-worker" data-autodisable>Click me first!</button>
 
-  <video id='video'></video>
-  <div style='position: absolute; right: 320px; top: 20px'>
-    <canvas id='canvas' class='reversed' style="position: absolute; left: 0; top: 0; z-index: 0;"></canvas>
-    <canvas id='canvas_top' class="reversed" style="position: absolute; left: 0; top: 0; z-index: 1;"></canvas>
-    <br />
-    <canvas id='annotated' style="position: absolute; left: 0; top: 240;"></canvas>
+  Expert
+  <br />
+  <video id='video_remote'></video>
+  <video id='video_local' class="hidden"></video>
+  <div style='position: absolute; right: 20px; top: 20px'>
+    <p>Me + data from expert</p>
+    <div style="width: 300px; height: 210px; position: relative;">
+      <canvas id='canvas' class='reversed bottom_layer'></canvas>
+      <canvas id='canvas_top' class="reversed top_layer"></canvas>
+    </div>
+    <hr />
+    <p>Snapshot from expert</p>
+    <canvas id='annotated'></canvas>
   </div>
 
   <script src="ui.js"></script>
