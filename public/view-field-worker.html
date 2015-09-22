@@ -29,12 +29,16 @@
   </div>
 
   <script src="ui.js"></script>
+  <script src="ice_servers.js"></script>
   <script src="field_worker.js"></script>
   <script>
     $(function() {
-      recoll.initUI(
-        $('[data-button="field-worker"]')
+      var dfd = $.Deferred();
+      recoll.init(
+        { fieldWorkerButton: $('[data-button="field-worker"]') },
+        dfd
       );
+      getICEServers(dfd);
     });
   </script>
 </body>

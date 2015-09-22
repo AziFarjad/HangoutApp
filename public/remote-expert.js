@@ -48,9 +48,19 @@ var recoll = (function($) {
 
   navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 
-  function iAmTheExpert() {
-    // stand-alone peer server recoll-peer-server.herokuapp.com was set up to allow secure connection
-    var peer = new Peer('remote-export-expert', { host: 'recoll-peer-server.herokuapp.com', secure: true, port: 443, debug: 3 });
+  /**
+  * Initialise peer.js connection
+  @param {Object} config - contains the ICE servers array
+  */
+  function initPeer(config) {
+    // stand-alone peer server recoll-peer-server.herokuapp.com was set up to allow HTTPS
+    var peer = new Peer('remote-export-expert',
+      { host: 'recoll-peer-server.herokuapp.com',
+        secure: true,
+        port: 443,
+        debug: 3,
+        config: config
+    });
 
     peer.on('error', function(error) { log("eeek! " + error); });
 
@@ -80,7 +90,7 @@ var recoll = (function($) {
         log('Failed to get local stream' + err);
       });
     });
-  };
+  }
 
   function sendSnapshot() {
     var ctx = $('#temp')[0].getContext('2d');
@@ -89,7 +99,7 @@ var recoll = (function($) {
 
     log('sending snapshot.');
     connToFieldWorker.send($('#temp')[0].toDataURL());
-  };
+  }
 
   function takeSnapshot() {
     var snapshot = $('#snapshot');
@@ -100,7 +110,7 @@ var recoll = (function($) {
     snapshot.sketch('actions', []);
     snapshot[0].getContext('2d').clearRect(0, 0, width, height);
     snapshotImage.src = snapshotDataUrl;
-  };
+  }
 
   function captureHands() {
 // Define a custom colour in Tracking utility
@@ -125,7 +135,7 @@ var recoll = (function($) {
         return false;
     });*/
     var colors = new tracking.ColorTracker(['blue']);
-    //var colors = new tracking.ColorTracker(['magenta', 'yellow']);
+    //var colors = new tracking.ColorTracker(['magenta', 'yellow']); // magenta and yellow are predefined colours
 
     // Detect rectangular areas in video which have objects with the defined colour in them (i.e. hands)
     var colorRects = [];
@@ -166,9 +176,13 @@ var recoll = (function($) {
       showCapturedHands(filteredCorners);
     });
     tracking.track('#video_local', tracker, { camera: false });
-  };
+  }
 
-  // Checks if the dot is within any of the given rectangulars
+  /** Checks if the dot is within any of the given rectangulars
+  @param {Number} x
+  @param {Number} y
+  @param {Array} rects - array of rectuangulars, each element has properties: x, y, width, height
+  */
   function checkWithinArea(x, y, rects) {
     var within = false;
     rects.forEach(function(rect) {
@@ -178,8 +192,12 @@ var recoll = (function($) {
           }
     });
     return within;
-  };
+  }
 
+  /**
+  Diplays captured hands on the layer above field worker's video
+  @param {Array} data - array like [x1, y1, x2, y2, ...]
+  */
   function showCapturedHands(data) {
     var context = $('#canvas_top')[0].getContext('2d');
     context.clearRect(0, 0, width, height);
@@ -187,20 +205,21 @@ var recoll = (function($) {
       context.fillStyle = '#f00';
       context.fillRect(data[i], data[i + 1], 2, 2);
     }
-  };
+  }
 
-  initUI = function(
-    $expertButton,
-    $captureHandsButton,
-    $takeSnapshotButton,
-    $sendSnapshotButton) {
-    $expertButton.click(iAmTheExpert);
-    $captureHandsButton.click(captureHands);
-    $takeSnapshotButton.click(takeSnapshot);
-    $sendSnapshotButton.click(sendSnapshot);
+  /**
+  * Initialises the app
+  * @param {Object} ui - an object with DOM elements to initialise
+  * @param {$.Deferred} dfd - deferred object passing ICE servers array
+  */
+  init = function(ui, dfd) {
+    ui.expertButton.click(function() { dfd.done(initPeer); });
+    ui.captureHandsButton.click(captureHands);
+    ui.takeSnapshotButton.click(takeSnapshot);
+    ui.sendSnapshotButton.click(sendSnapshot);
   };
 
   return {
-    initUI : initUI
+    init : init
   };
 })( jQuery );

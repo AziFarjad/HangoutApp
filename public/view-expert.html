@@ -36,15 +36,20 @@
   </div>
 
   <script src="ui.js"></script>
+  <script src="ice_servers.js"></script>
   <script src="remote-expert.js"></script>
   <script>
     $(function() {
-      recoll.initUI(
-        $('[data-button="expert"]'),
-        $('[data-button="capture-hands"]'),
-        $('[data-button="take-snapshot"]'),
-        $('[data-button="send-snapshot"]')
+      var dfd = $.Deferred();
+      recoll.init({
+          expertButton: $('[data-button="expert"]'),
+          captureHandsButton: $('[data-button="capture-hands"]'),
+          takeSnapshotButton: $('[data-button="take-snapshot"]'),
+          sendSnapshotButton: $('[data-button="send-snapshot"]')
+        },
+        dfd
       );
+      getICEServers(dfd);
     });
   </script>
 </body>

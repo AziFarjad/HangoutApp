@@ -46,8 +46,18 @@ var recoll = (function($) {
 
   navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 
-  function iAmTheFieldWorker() {
-    var peer = new Peer('remote-export-field-worker', { host: 'recoll-peer-server.herokuapp.com', secure: true, port: 443, debug: 3 });
+  /**
+  * Initialise peer.js connection
+  @param {Object} config - contains the ICE servers array
+  */
+  function initPeer(config) {
+    var peer = new Peer('remote-export-field-worker',
+      { host: 'recoll-peer-server.herokuapp.com',
+        secure: true,
+        port: 443,
+        debug: 3,
+        config: config
+    });
 
     peer.on('error', function(error) { log("eek! " + error); });
 
@@ -89,14 +99,18 @@ var recoll = (function($) {
         })
       });
     });
-  };
+  }
 
-  initUI = function(
-    $fieldWorkerButton) {
-    $fieldWorkerButton.click(iAmTheFieldWorker);
+  /**
+  * Initialises the app
+  * @param {Object} ui - an object with DOM elements to initialise
+  * @param {$.Deferred} dfd - deferred object passing ICE servers array
+  */
+  init = function(ui, dfd) {
+    ui.fieldWorkerButton.click(function() { dfd.done(initPeer); });
   };
 
   return {
-    initUI : initUI
+    init : init
   };
 })( jQuery );
