@@ -54,7 +54,11 @@ STUN and TURN servers added in order to be able to serve clients who are behind 
 
 ### Owners of the assets
 Git repository: Matt Carter
+
 Heroku app: Azi Farjad
+
 Peer server at Heroku: Katia Bondar
+
 xirsys.com account (STUN and TURN servers): Katia Bondar
+
 [myThoughtWorks group:](https://thoughtworks.jiveon.com/groups/recoll-remote-collaboration-solutions): Leila Alem, Nikki Foster
