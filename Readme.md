@@ -13,7 +13,7 @@
 
 [http://www.webrtc.org/](http://www.webrtc.org/)
 
- 
+
 [http://peerjs.com/](http://peerjs.com/)
 
 ## Developer Quick Start Guide
@@ -21,7 +21,7 @@
 
 - Use the IDE of your choice to edit the code. Atom was used by the initial developers, but any thing like Sublime, WebStorm, ... should be fine.
 - Install node.js
-- Clone this repo: [https://github.com/AziFarjad/HangoutApp](https://github.com/AziFarjad/HangoutApp)
+- Clone this repo: [https://github.com/AziFarjad/HangoutApp](https://github.com/mattrcarter/HangoutApp)
 - After getting the code from GitHub here is how you run the node.js app on your local machine
 
 ### install
@@ -51,3 +51,10 @@ A custom server was set up to allow SSL: recoll-peer-server.herokuapp.com
 ### STUN and TURN servers
 xirsys.com (currently a free dummy account used)
 STUN and TURN servers added in order to be able to serve clients who are behind NAT.
+
+### Owners of the assets
+Git repository: Matt Carter
+Heroku app: Azi Farjad
+Peer server at Heroku: Katia Bondar
+xirsys.com account (STUN and TURN servers): Katia Bondar
+[myThoughtWorks group:](https://thoughtworks.jiveon.com/groups/recoll-remote-collaboration-solutions): Leila Alem, Nikki Foster
