@@ -52,7 +52,7 @@ A custom server was set up to allow SSL: recoll-peer-server.herokuapp.com
 xirsys.com (currently a free dummy account used)
 STUN and TURN servers added in order to be able to serve clients who are behind NAT.
 
-### Owners of the assets
+## Owners of the assets
 Git repository: Matt Carter
 
 Heroku app: Azi Farjad
@@ -61,4 +61,4 @@ Peer server at Heroku: Katia Bondar
 
 xirsys.com account (STUN and TURN servers): Katia Bondar
 
-[myThoughtWorks group:](https://thoughtworks.jiveon.com/groups/recoll-remote-collaboration-solutions): Leila Alem, Nikki Foster
+[myThoughtWorks group](https://thoughtworks.jiveon.com/groups/recoll-remote-collaboration-solutions): Leila Alem, Nikki Foster
