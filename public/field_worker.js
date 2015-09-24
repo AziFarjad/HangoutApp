@@ -79,7 +79,6 @@ var recoll = (function($) {
 
         call.on('stream', function(stream) {
           $('#video_remote').attr('src', url ? url.createObjectURL(stream) : stream);
-          $('#video_remote')[0].play();
         });
       });
 

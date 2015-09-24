@@ -70,7 +70,6 @@ var recoll = (function($) {
       navigator.getUserMedia({ video: true, audio: true }, function(stream) {
         // display local video
         $('#video_local').attr('src', url ? url.createObjectURL(stream) : stream);
-        $('#video_local')[0].play();
 
         log('expert is calling the fieldworker.');
         var call = peer.call('remote-export-field-worker', stream);
@@ -79,7 +78,6 @@ var recoll = (function($) {
           log('call started, sending and receiving video stream.');
 
           $('#video_remote').attr('src', url ? url.createObjectURL(stream) : stream);
-          $('#video_remote')[0].play();
         });
 
         log('expert is connecting to fieldworker.');
