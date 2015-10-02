@@ -31,7 +31,10 @@ Go to directory of the code you got from Github
 npm install
 ```
 ```
-node server.js
+npm install -g bower
+```
+```
+npm start
 ```
 ### usage
 Now try [http://localhost:3000/](http://localhost:3000/) to see the prototype in action.

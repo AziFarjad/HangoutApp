@@ -11,5 +11,11 @@
     "express": "https://registry.npmjs.org/express/-/express-4.13.3.tgz",
     "gulp": "*",
     "gulp-nodemon": "*"
+  },
+  "devDependencies": {
+    "bower": "^1.3.1"
+  },
+  "scripts": {
+    "postinstall": "bower install"
   }
 }

@@ -1,56 +1,61 @@
-<html>
+<!doctype html>
+<html lang="en" ng-app="recollApp">
 <head>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/0.3.14/peer.min.js"></script>
-  <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
-  <script src="sketch.min.js"></script>
-  <script src="tracking-min.js"></script>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="assets/css/style.css" />
 </head>
 
-<body>
+<body ng-controller="connectionController">
   <h1>Expert</h1>
 
-  <textarea id="log"></textarea>
+  <button type="button" auto-disable ng-click="connect()">Click me second!</button>
 
-  <button type="button" data-button="expert" data-autodisable>Click me second!</button>
-
-  <video id='video_remote' autoplay="true" class="hidden"></video>
+  <video id='video_remote' autoplay="true" class="hidden" ng-src="{{streams.remote}}"></video>
   Me
   <br />
-  <video id='video_local' autoplay="true"></video>
-  <div style='position: absolute; right: 20px; top: 20px'>
+  <video id='video_local' autoplay="true" ng-src="{{streams.local}}"></video>
+  <div style='position: absolute; right: 20px; top: 20px' ng-controller="handSegmController">
     Field worker + my hands
     <br />
-    <div style="width: 300px; height: 210px; position: relative;">
-      <canvas id='canvas' class='reversed bottom_layer'></canvas>
-      <canvas id='canvas_top' class="reversed top_layer"></canvas>
+    <div style="width: 300px; height: 225px; position: relative;">
+      <canvas id='canvas' class='bottom_layer' width="300" height="225" mirror-video="video_remote" reverse-video></canvas>
+      <canvas id='canvas_top' class="top_layer" width="300" height="225" trackingjs-hands-layer leap-motion-hands-layer reverse-video></canvas>
     </div>
-    <button type="button" data-button="capture-hands" data-autodisable>Capture "hands"</button>
-    Captures blue colour
+    <select ng-change="captureHands('#video_local')" ng-model="data.selectedType"
+        ng-options="option.name for option in data.types track by option.id">
+      <option value="">Select Hand Segmentation</option>
+    </select>
     <hr />
-    <canvas id='snapshot' class='reversed'></canvas>
-    <br />
-    <button type="button" class='secondary' data-button="take-snapshot">Take snapshot</button>
-    <button type="button" class='secondary' data-button="send-snapshot">Send snapshot</button>
-    <canvas id='temp' style='display: none;'></canvas>
+    <div ng-controller="snapshotController">
+      <canvas id='snapshot' width="300" height="225" reverse-video snapshot></canvas>
+      <br />
+      <button type="button" class='secondary' ng-click="takeSnapshot()">Take snapshot</button>
+      <button type="button" class='secondary' ng-click="sendSnapshot()">Send snapshot</button>
+      <canvas id='temp' style='display: none;' width="300" height="225"></canvas>
+    </div>
   </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/0.3.14/peer.min.js"></script>
+  <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+  <script src="assets/vendor/angular/angular.min.js"></script>
+  <script src="app/app.js"></script>
 
-  <script src="ui.js"></script>
-  <script src="ice_servers.js"></script>
-  <script src="remote-expert.js"></script>
-  <script>
-    $(function() {
-      var dfd = $.Deferred();
-      recoll.init({
-          expertButton: $('[data-button="expert"]'),
-          captureHandsButton: $('[data-button="capture-hands"]'),
-          takeSnapshotButton: $('[data-button="take-snapshot"]'),
-          sendSnapshotButton: $('[data-button="send-snapshot"]')
-        },
-        dfd
-      );
-      getICEServers(dfd);
-    });
-  </script>
+  <!-- hand segmentation module -->
+  <script src="app/components/expert/hand-segmentation/hand-segm-controller.js"></script>
+  <script src="app/components/expert/hand-segmentation/hand-segm-trackingjs-service.js"></script>
+  <script src="app/shared/hands/hands-layer-trackingjs-directive.js"></script>
+  <script src="app/components/expert/hand-segmentation/hand-segm-leap-motion-service.js"></script>
+  <script src="app/shared/hands/hands-layer-leap-motion-directive.js"></script>
+  <!-- hand segmentation module end -->
+
+  <script src="app/components/expert/connection/connection-service.js"></script>
+  <script src="app/components/expert/connection/connection-controller.js"></script>
+  <script src="app/components/expert/snapshot/snapshot-service.js"></script>
+  <script src="app/components/expert/snapshot/snapshot-controller.js"></script>
+  <script src="app/components/expert/snapshot/snapshot-directive.js"></script>
+  <script src="app/shared/connection/ice_servers_service.js"></script>
+  <script src="app/shared/video/mirror-video-directive.js"></script>
+  <script src="app/shared/video/reverse-video-directive.js"></script>
+  <script src="app/shared/ui/auto-disable-directive.js"></script>
+  <script src="assets/vendor/sketch.js-2/lib/sketch.min.js"></script>
+  <script src="assets/js/tracking-min.js"></script>
 </body>
 </html>

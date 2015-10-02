@@ -1,45 +1,46 @@
-
-<html>
+<!doctype html>
+<html lang="en" ng-app="recollApp">
 <head>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/0.3.14/peer.min.js"></script>
-  <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
-  <script src="sketch.min.js"></script>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="assets/css/style.css" />
 </head>
 
-<body>
+<body ng-controller="connectionController" >
   <h1>Field Worker</h1>
   <textarea id="log"></textarea>
 
-  <button type="button" data-button="field-worker" data-autodisable>Click me first!</button>
+  <button type="button" ng-click="connect()" auto-disable>Click me first!</button>
 
   Expert
   <br />
-  <video id='video_remote' autoplay="true"></video>
-  <video id='video_local' class="hidden" autoplay="true"></video>
+  <video id='video_remote' autoplay="true" ng-src="{{streams.remote}}"></video>
+  <video id='video_local' class="hidden" autoplay="true" ng-src="{{streams.local}}"></video>
   <div style='position: absolute; right: 20px; top: 20px'>
     <p>Me + data from expert</p>
     <div style="width: 300px; height: 210px; position: relative;">
-      <canvas id='canvas' class='reversed bottom_layer'></canvas>
-      <canvas id='canvas_top' class="reversed top_layer"></canvas>
+      <canvas id="canvas" class="bottom_layer" width="300" height="225" mirror-video="video_local" reverse-video></canvas>
+      <canvas id="canvas_top" class="top_layer" width="300" height="225" trackingjs-hands-layer leap-motion-hands-layer reverse-video></canvas>
     </div>
     <hr />
     <p>Snapshot from expert</p>
-    <canvas id='annotated'></canvas>
+    <canvas id='annotated' width="300" height="225" snapshot></canvas>
   </div>
 
-  <script src="ui.js"></script>
-  <script src="ice_servers.js"></script>
-  <script src="field_worker.js"></script>
-  <script>
-    $(function() {
-      var dfd = $.Deferred();
-      recoll.init(
-        { fieldWorkerButton: $('[data-button="field-worker"]') },
-        dfd
-      );
-      getICEServers(dfd);
-    });
-  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/0.3.14/peer.min.js"></script>
+  <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+  <script src="assets/vendor/angular/angular.min.js"></script>
+  <script src="app/app.js"></script>
+  <script src="app/components/field-worker/connection/connection-service.js"></script>
+  <script src="app/components/field-worker/connection/connection-controller.js"></script>
+  <script src="app/components/field-worker/snapshot/snapshot-directive.js"></script>
+  <script src="app/shared/connection/ice_servers_service.js"></script>
+
+  <!-- hand segmentation module -->
+  <script src="app/shared/hands/hands-layer-trackingjs-directive.js"></script>
+  <script src="app/shared/hands/hands-layer-leap-motion-directive.js"></script>
+  <!-- hand segmentation module end -->
+
+  <script src="app/shared/video/mirror-video-directive.js"></script>
+  <script src="app/shared/video/reverse-video-directive.js"></script>
+  <script src="app/shared/ui/auto-disable-directive.js"></script>
 </body>
 </html>
