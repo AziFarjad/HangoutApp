@@ -20,21 +20,19 @@ recollApp.controller('connectionController', ['$scope', '$rootScope', '$q', '$wi
     };
 
     $scope.activateLeapMotion = function() {
+      var riggedHandPlugin;
+
       Leap.loop({
         hand: function(hand){}
       })
       .use('riggedHand')
-      // .use('handEntry')
       riggedHandPlugin = Leap.loopController.plugins.riggedHand;
 
-        var context = $('#canvas_top')[0].getContext('2d');
-        context.clearRect(0, 0, width, height);
+      var context = $('#canvas_top')[0].getContext('2d');
+      context.clearRect(0, 0, 300, 210);
 
-        var canvases = document.getElementsByTagName('canvas')
-
-        canvases[4].className = "leap-canvas"
-        console.log('HERE', riggedHandPlugin)
-
+      var canvases = document.getElementsByTagName('canvas')
+      canvases[4].className = "leap-canvas"
     };
 
     localVideoDeferred.promise.then(function(stream) {
