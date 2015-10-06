@@ -49,13 +49,14 @@ canvas.top_layer {
   z-index: 1;
 }
 
-canvas.leap-canvas{
-  width: 44% !important;
+canvas.leap-motion-layer{
+  width: 40em !important;
   position: absolute !important;
-  right: 25px !important;
+  right: -10em !important;
   left: auto !important;
-  height: 40% !important;
-  top: 40px !important;
+  height: 20em !important;
+  top: 2em !important;
+  border: none !important;
 }
 
 #log {

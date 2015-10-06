@@ -10,21 +10,21 @@ recollApp.directive('leapMotionHandsLayer', ['$rootScope', function ($rootScope)
     link: function(scope, elem, attrs) {
       $rootScope.$on('hands-data', function(e, data) {
         if (data.type && data.type === 'leapMotion') {
-            var riggedHandPlugin;
+          var riggedHandPlugin;
 
-            Leap.loop({
-              hand: function(hand){}
-            })
-            .use('riggedHand')
-            riggedHandPlugin = Leap.loopController.plugins.riggedHand;
+          Leap.loop({
+            hand: function(hand){}
+          })
+          .use('riggedHand')
+          riggedHandPlugin = Leap.loopController.plugins.riggedHand;
 
-            // var canvases = document.getElementsByTagName('canvas')
-            // canvases[4].className = "leap-canvas"
+            var canvases = document.getElementsByTagName('canvas')
+            canvases[4].className = "leap-motion-layer"
 
           var context = elem[0].getContext('2d');
           context.clearRect(0, 0, elem[0].width, elem[0].height);
           context.font="20px Georgia";
-          context.fillText(data.text, 10, 50);
+          // context.fillText(data.text, 10, 50);
         }
       });
     }
