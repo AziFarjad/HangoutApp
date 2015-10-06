@@ -49,6 +49,15 @@ canvas.top_layer {
   z-index: 1;
 }
 
+canvas.leap-canvas{
+  width: 44% !important;
+  position: absolute !important;
+  right: 25px !important;
+  left: auto !important;
+  height: 40% !important;
+  top: 40px !important;
+}
+
 #log {
   font-family: monospace;
   height: 100px;

@@ -19,6 +19,10 @@ recollApp.controller('connectionController', ['$scope', '$rootScope', '$q', '$wi
       });
     };
 
+    $scope.activateLeapMotion = function() {
+      Leap.Controller().use('riggedHand').connect()
+    };
+
     localVideoDeferred.promise.then(function(stream) {
       $scope.streams.local = $sce.trustAsResourceUrl(url.createObjectURL(stream));
     }, function(err) {
