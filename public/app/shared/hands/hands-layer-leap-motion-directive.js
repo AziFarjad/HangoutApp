@@ -18,8 +18,13 @@ recollApp.directive('leapMotionHandsLayer', ['$rootScope', function ($rootScope)
           .use('riggedHand')
           riggedHandPlugin = Leap.loopController.plugins.riggedHand;
 
-            var canvases = document.getElementsByTagName('canvas')
+          var canvases = document.getElementsByTagName('canvas')
+          if(canvases[4] === undefined){
+            canvases[3].className = "leap-motion-layer"
+          } else{
             canvases[4].className = "leap-motion-layer"
+          }
+
 
           var context = elem[0].getContext('2d');
           context.clearRect(0, 0, elem[0].width, elem[0].height);
