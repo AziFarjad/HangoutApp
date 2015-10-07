@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!--Import Google Icon Font-->
+    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="assets/build/css/app.min.css"
+          media="screen,projection"/>
+
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
+<body>
+
+<nav class="z-depth-3">
+    <div class="nav-wrapper">
+        <img src="assets/images/egg.png" style="height:63px"/>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li><a href="#">ReColl project</a></li>
+            <li><a href="#">About us</a></li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="row">
+        <div class="row"></div>
+        <div class="col m5" style="margin-top:50px; margin-bottom:50px;color:#6E6E6E">
+            <h4>Field Worker?</h4>
+
+            <p>Not an Expert? click the <a href="/login-field-worker.html">Field worker</a> to login as a field worker
+            </p>
+        </div>
+
+        <div class="col m6 offset-m1" style="margin-top:50px; margin-bottom:50px">
+            <h4 class="center-align">
+                Expert Login
+            </h4>
+
+            <div class="row">
+                <form class="col s12">
+                    <div class="row">
+                        <div class="input-field col s12"><i class="material-icons prefix">account_circle</i>
+                            <input id="email" type="email" class="validate">
+                            <label for="email">Email</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12"><i class="material-icons prefix">lock</i>
+                            <input id="pass" type="password" class="validate">
+                            <label for="pass">Password</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12">
+                            <p>
+                                <input type="checkbox" id="remember">
+                                <label for="remember">Remember me</label>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="divider"></div>
+                    <div class="row">
+                        <div class="col m12">
+                            <p class="right-align">
+                                <a class="btn btn-large waves-effect waves-light z-depth-2" href="/view-expert.html"
+                                   name="action"><i
+                                        class="material-icons left">power_settings_new</i>
+                                    Login
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="assets/vendor/materialize/dist/js/materialize.js"></script>
+</body>
+<footer class="page-footer">
+    <div class="container">
+        <div class="row" style="color:#bdbdbd">
+            <div class="col l6 s12">
+                <h5 >Follow us</h5>
+                icon for Facebook
+                icon for Twitter
+            </div>
+            <div class="col l4 offset-l2 s12">
+                <h5>More links</h5>
+                <ul>
+                    <li><a class=""
+                           href="http://www.csiro.au/en/Research/DPF/Areas/Autonomous-systems/Guardian/ReMoTe">Leila's
+                        research work at CSIRO</a></li>
+                    <li><a class="text-lighten-3" href="https://github.com/mattrcarter/HangoutApp">Source
+                        Code</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="footer-copyright">
+        <div class="container" style="color:#F3843E">
+            © ThoughtWorks
+        </div>
+    </div>
+</footer>
+</html>
