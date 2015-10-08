@@ -2028,7 +2028,7 @@ ul {
 blockquote {
   margin: 20px 0;
   padding-left: 1.5rem;
-  border-left: 5px solid #393939; }
+  border-left: 5px solid #00CBE9; }
 
 i {
   line-height: inherit; }
@@ -2063,7 +2063,7 @@ img.responsive-img, video.responsive-video {
   .pagination li.active a {
     color: #fff; }
   .pagination li.active {
-    background-color: #393939; }
+    background-color: #00CBE9; }
   .pagination li.disabled a {
     cursor: default;
     color: #999; }
@@ -2172,7 +2172,7 @@ ul.staggered-list li {
 footer.page-footer {
   margin-top: 20px;
   padding-top: 20px;
-  background-color: #393939; }
+  background-color: #00CBE9; }
   footer.page-footer .footer-copyright {
     overflow: hidden;
     height: 50px;
@@ -5253,7 +5253,7 @@ nav ul a span.badge {
 
 nav {
   color: #fff;
-  background-color: #393939;
+  background-color: #00CBE9;
   width: 100%;
   height: 56px;
   line-height: 56px; }
@@ -5730,7 +5730,7 @@ small {
     letter-spacing: .8px;
     width: 15%; }
     .tabs .tab a {
-      color: #393939;
+      color: #00CBE9;
       display: block;
       width: 100%;
       height: 100%;
@@ -5740,15 +5740,15 @@ small {
       -ms-transition: color .28s ease;
       transition: color .28s ease; }
       .tabs .tab a:hover {
-        color: #6c6c6c; }
+        color: #50e8ff; }
     .tabs .tab.disabled a {
-      color: #6c6c6c;
+      color: #50e8ff;
       cursor: default; }
   .tabs .indicator {
     position: absolute;
     bottom: 0;
     height: 2px;
-    background-color: #5f5f5f;
+    background-color: #37e5ff;
     will-change: left, right; }
 
 .tabs .tab {
@@ -5818,7 +5818,7 @@ small {
 .btn, .btn-large {
   text-decoration: none;
   color: #fff;
-  background-color: #ff5A09;
+  background-color: #fd8a33;
   text-align: center;
   letter-spacing: .5px;
   -webkit-transition: .2s ease-out;
@@ -5828,7 +5828,7 @@ small {
   transition: .2s ease-out;
   cursor: pointer; }
   .btn:hover, .btn-large:hover {
-    background-color: #ff6b23; }
+    background-color: #fd984c; }
 
 .btn-floating {
   display: inline-block;
@@ -5840,7 +5840,7 @@ small {
   height: 37px;
   line-height: 37px;
   padding: 0;
-  background-color: #ff5A09;
+  background-color: #fd8a33;
   border-radius: 50%;
   transition: .3s;
   cursor: pointer;
@@ -6234,7 +6234,7 @@ select:focus {
 
 button:focus {
   outline: none;
-  background-color: #ff681d; }
+  background-color: #fd9647; }
 
 label {
   font-size: 0.8rem;
@@ -7069,7 +7069,7 @@ select {
       left: auto; } }
 
 .side-nav .collapsible-body li.active, .side-nav.fixed .collapsible-body li.active {
-  background-color: #393939; }
+  background-color: #00CBE9; }
   .side-nav .collapsible-body li.active a, .side-nav.fixed .collapsible-body li.active a {
     color: #fff; }
 
